@@ -1,21 +1,22 @@
-const express = require('express');
-const http = require('http');
-const socketio = require('socket.io');
+const app = require('express')();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server, {
+    cors: {
+      origin: "*" // To remove Cross-origin error
+    }
+});
+
 const router = require('./router');
 
 const PORT = process.env.PORT || 5000
 
-const app = express();
-const server = http.createServer(app);
-const io = socketio(server, {
-    cors: {
-      origin: "*"
-    }
-});
-
 io.on('connection', (socket)=> {
     console.log('Socket is connected!!');
 
+    socket.on("chat", payload => {
+        console.log('payload')
+        socket.broadcast.emit("Payload sent", payload );
+    })
     socket.on('diconnect', () => {
         console.log('User has screenLeft, socket has been disconnected !!');
     })
