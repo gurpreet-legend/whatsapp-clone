@@ -51,17 +51,25 @@ input {
   z-index: -20;
 } 
 
-.input-form {
+.input-container {
+  width: 100vw;
+  display: flex;
+  background: rgba(128, 128, 128, 0.678);
+  padding: 1rem 0;
+}
+
+.input-container {
   position: absolute;
   bottom: 0;
   left: 0;
-  background: rgba(128, 128, 128, 0.582);
   width: 100%;
-  padding: 20px 0;
+}
+.input-form {
   display: flex;
+  flex-grow: 2;
 }
 
-.input{
+input{
   flex-grow: 2;
   padding: 1rem;
   border-radius: 100px;
@@ -77,10 +85,19 @@ input {
   font-size: 1.5rem;
 }
 
-.chat-p {
+.chat-block {
   margin: 1rem;
-  padding: 1rem;
   background: white;
   width: fit-content;
   border-radius: 5px;
+  font-size: 1.5rem;
+  padding: 1rem;
+}
+
+.chat-block p{
+  margin: 0;
+}
+.userID {
+  color: gray;
+  font-size: 1rem;
 }
