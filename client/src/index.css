@@ -85,19 +85,40 @@ input{
   font-size: 1.5rem;
 }
 
-.chat-block {
+.chat-block-green {
+  margin: 1rem;
+  background: #dcf8c6;
+  width: fit-content;
+  border-radius: 10px;
+  font-size: 1.5rem;
+  padding: 1rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.438);
+}
+
+.chat-block-white {
   margin: 1rem;
   background: white;
   width: fit-content;
-  border-radius: 5px;
+  border-radius: 10px;
   font-size: 1.5rem;
   padding: 1rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.438);
 }
 
-.chat-block p{
+.chat-block-white p, .chat-block-green p{
   margin: 0;
 }
 .userID {
   color: gray;
   font-size: 1rem;
+}
+
+.onlineUser-container {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 2rem;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.356);
 }

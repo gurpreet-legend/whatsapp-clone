@@ -27,7 +27,18 @@ io.on('connection', (socket)=> {
 
     socket.on("join-room", room => {
         socket.join(room);
+        // console.log(room)
+        // const Obj = io.sockets.adapter.rooms
+        // console.log(Obj)
     })
+
+    socket.on("get-online-users", room => {
+        console.log(room)
+        const onlineUsersArray = Array.from(io.sockets.adapter.rooms.get(room))
+        console.log(onlineUsersArray)
+        io.to(room).emit("recieve-online-users", onlineUsersArray)
+    })
+
     socket.on('diconnect', () => {
         console.log('User has screenLeft, socket has been disconnected !!');
     })
