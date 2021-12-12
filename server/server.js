@@ -14,8 +14,8 @@ io.on('connection', (socket)=> {
     console.log('Socket is connected!!');
 
     socket.on("chat", payload => {
-        console.log('payload')
-        socket.broadcast.emit("Payload sent", payload );
+        console.log(payload)
+        io.emit("recieve-message", payload );
     })
     socket.on('diconnect', () => {
         console.log('User has screenLeft, socket has been disconnected !!');
