@@ -17,3 +17,5 @@ REACT_APP_APP_ID=xxxxxxxxxx
 ```
 
 * And in the firebase project, go to Firestore DataBase and create a collection named rooms, just like this :
+<img src="https://i.ibb.co/xsh3PW4/Screenshot-2021-12-13-223432.png" alt="Screenshot-2021-12-13-223432" border="0">
+
