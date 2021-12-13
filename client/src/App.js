@@ -8,11 +8,14 @@ import OnlineUsers from './components/OnlineUsers';
 //FIREBASE SET-UP
 import { initializeApp } from 'firebase/app'
 import {
-    getFirestore, collection, onSnapshot,
-    addDoc, deleteDoc, doc,
-    query, where,
-    orderBy, serverTimestamp,
-    updateDoc
+    getFirestore, 
+    collection, 
+    onSnapshot,
+    addDoc,
+    query, 
+    where,
+    getDocs, 
+    serverTimestamp
 } from 'firebase/firestore'
 
 const firebaseConfig = {
@@ -42,26 +45,17 @@ function App() {
   const [room, setRoom] = useState('')
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [chat, setChat] = useState([])
-  console.log(chat);
   // collection ref
   const roomsColRef = collection(db, 'rooms')
   // queries
   const roomRef = query(roomsColRef, where("roomID", "==", room))
-  console.log(roomRef)
 
 
 
     const sendChat = (e) => {
       e.preventDefault();
       const userID = socket.id;
-      let currTimeStamp = serverTimestamp();
       if(room != ''){
-        let chatArr  = [...chat, {message, userID, room, timeStamp:currTimeStamp}];
-        chatArr.sort((x, y) => {
-          return x.timeStamp - y.timeStamp;
-        })
-        setChat(chatArr);
-        
         onSnapshot(roomRef, (snapshot) => {
 
           const chatColRef = collection(db, 'rooms', snapshot.docs[0].id, 'chat')
@@ -69,13 +63,15 @@ function App() {
             message: message,
             userID: userID,
             userName: `${userID}+name`,
-            timeStamp: currTimeStamp
-  
+            timeStamp: serverTimestamp()
           })
-        })
-      }
+          })
 
-      socket.emit("chat", {message, userID, room, timeStamp: currTimeStamp})
+        }
+        let currTimeStamp = new Date()
+        setChat([...chat, {message, userID, room, timeStamp: currTimeStamp}]);
+        socket.emit("chat", {message, userID, room, timeStamp: currTimeStamp})
+
       setMessage('')
     }
 
@@ -93,46 +89,72 @@ function App() {
       socket.emit("join-room", room)
       localStorage.setItem("roomID", room)
       getOnlineUsers()
-      onSnapshot(roomRef, (ref) => {
-        if(ref.empty){
-          addDoc(roomsColRef, {
-            roomID: room
-          })
-        }
-        else {
-          const chatColRef = collection(db, 'rooms', ref.docs[0].id, 'chat')
-          onSnapshot(chatColRef, (snap) => {
-            // console.log(snap.docs)
-            let chatArr = snap.docs.map(doc => {
-              let messageString = doc.data().message;
-              let userID = doc.data().userID;
-              let timeStamp = doc.data().timeStamp;
-              // console.log(doc.data())
-              return ( {message: messageString, userID, room, timeStamp})
-            })
-            chatArr.sort((x, y) => {
-              return x.timeStamp - y.timeStamp;
-            })
-            setChat(chatArr)
-          })
-        }
-      })
-      
-    }
 
+      getDocs(roomRef)
+      .then(
+        (ref) => {
+          if(ref.empty){
+            addDoc(roomsColRef, {
+              roomID: room
+            })
+            setChat([])
+          }
+          else {
+            const chatColRef = collection(db, 'rooms', ref.docs[0].id, 'chat')
+            getDocs(chatColRef)
+              .then(snap=> {
+                let chatArr = snap.docs.map(doc => {
+                  let messageString = doc.data().message;
+                  let userID = doc.data().userID;
+                  let timeStamp = doc.data().timeStamp;
+                  // console.log(doc.data())
+                  return ( {message: messageString, userID, room, timeStamp})
+                })
+                chatArr.sort((x, y) => {
+                  return x.timeStamp - y.timeStamp;
+                })
+                setChat(chatArr)
+              })
+          }
+        }
+      )
+          // onSnapshot(chatColRef, (snap) => {
+          //   // console.log(snap.docs)
+          //     let chatArr = snap.docs.map(doc => {
+          //     let messageString = doc.data().message;
+          //     let userID = doc.data().userID;
+          //     let timeStamp = doc.data().timeStamp;
+          //     // console.log(doc.data())
+          //     return ( {message: messageString, userID, room, timeStamp})
+          //   })
+          //   chatArr.sort((x, y) => {
+          //     return x.timeStamp - y.timeStamp;
+          //   })
+          //   setChat(chatArr)
+          // })
+        }
+    //   })
+
+      
+    // }
 
     useEffect(() => {
       socket.on("recieve-message", (payload) => {
-        let chatArr = [...chat, payload]
-        chatArr.sort((x, y) => {
-          return x.timeStamp - y.timeStamp;
-        })
-        setChat(chatArr);
+        console.log("CALLED!!!!!!!!!!!!!!!")
+        // let chatArr = [...chat, payload]
+        // console.log(payload.timeStamp)
+        // chatArr.sort(function(x, y){
+        //   let date1 = new Date(x.timeStamp);
+        //   let date2 = new Date(y.timeStamp);
+        //   return date1 - date2 ;
+        // })
+        console.log(chat)
+        setChat([...chat, payload]);
+        console.log(chat)
       })
     })
 
     useEffect(() => {
-
       let roomName = localStorage.getItem("roomID")
       setRoom(roomName)
     }, [])
@@ -144,9 +166,9 @@ function App() {
         <h1>Whatsapp Clone</h1>
       </div>
       <div className="chat-container">
-        <OnlineUsers onlineUsers ={onlineUsers}/>
         <img src='/whatsapp-bg.png' alt="bg-image" className='bgImg'/>
-        {chat.map((payload, index) => {
+        <OnlineUsers onlineUsers ={onlineUsers}/>
+        {chat.length!=0 && chat.map((payload, index) => {
           return (
               <div className={payload.userID == socket.id ? 'chat-block-green' : 'chat-block-white'}>
                 <p key={index}>{payload.message}</p>

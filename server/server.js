@@ -27,9 +27,6 @@ io.on('connection', (socket)=> {
 
     socket.on("join-room", room => {
         socket.join(room);
-        // console.log(room)
-        // const Obj = io.sockets.adapter.rooms
-        // console.log(Obj)
     })
 
     socket.on("get-online-users", room => {

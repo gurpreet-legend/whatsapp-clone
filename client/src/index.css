@@ -25,6 +25,7 @@ input {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  position: relative;
   /* background-image: url('/whatsapp-bg.png') */
 }
 
@@ -40,11 +41,12 @@ input {
 }
 .chat-container {
   position: relative;
+  min-height: 100vh;
 }
 
 .bgImg {
   width: 100%;
-  height: 90vh;
+  height: 100%;
   position: absolute;
   top: 0;
   left: 0;
@@ -59,7 +61,7 @@ input {
 }
 
 .input-container {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
