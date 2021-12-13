@@ -17,14 +17,14 @@ import {
     getDocs, 
     serverTimestamp
 } from 'firebase/firestore'
-
+console.log(process.env.REACT_APP_API_KEY)
 const firebaseConfig = {
-  apiKey: "AIzaSyB0XRbbB6kmMxp7tMBoolP0M1Jl_jEe9rg",
-  authDomain: "whatsapp-clone-a5402.firebaseapp.com",
-  projectId: "whatsapp-clone-a5402",
-  storageBucket: "whatsapp-clone-a5402.appspot.com",
-  messagingSenderId: "485282657816",
-  appId: "1:485282657816:web:81b123178ece90cfc3356d"
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECTID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID
 };
 
 // init firebase
