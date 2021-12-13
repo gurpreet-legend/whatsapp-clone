@@ -118,39 +118,13 @@ function App() {
           }
         }
       )
-          // onSnapshot(chatColRef, (snap) => {
-          //   // console.log(snap.docs)
-          //     let chatArr = snap.docs.map(doc => {
-          //     let messageString = doc.data().message;
-          //     let userID = doc.data().userID;
-          //     let timeStamp = doc.data().timeStamp;
-          //     // console.log(doc.data())
-          //     return ( {message: messageString, userID, room, timeStamp})
-          //   })
-          //   chatArr.sort((x, y) => {
-          //     return x.timeStamp - y.timeStamp;
-          //   })
-          //   setChat(chatArr)
-          // })
-        }
-    //   })
 
-      
-    // }
+    }
+
 
     useEffect(() => {
       socket.on("recieve-message", (payload) => {
-        console.log("CALLED!!!!!!!!!!!!!!!")
-        // let chatArr = [...chat, payload]
-        // console.log(payload.timeStamp)
-        // chatArr.sort(function(x, y){
-        //   let date1 = new Date(x.timeStamp);
-        //   let date2 = new Date(y.timeStamp);
-        //   return date1 - date2 ;
-        // })
-        console.log(chat)
         setChat([...chat, payload]);
-        console.log(chat)
       })
     })
 
