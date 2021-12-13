@@ -4,8 +4,8 @@
 
 * Fork this repository and clone it on your device using command `git clone <your_repo_url>`
 * In the terminal, 
-    * `cd server` and run command `npm run start` to start the server
-    * `cd client` and run command `npm run start`
+    * `cd server` and run command `npm run start` to start the backend server
+    * `cd client` and run command `npm run start` to start the localhost erver
 * Create a firebase project and in the clients folder create a `.env` file and add the firebaseConfig parameters in your `.env` files just like this : 
 ```md
 REACT_APP_API_KEY=xxxxxxxxxx
