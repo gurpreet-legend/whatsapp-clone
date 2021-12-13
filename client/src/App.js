@@ -38,40 +38,44 @@ const socket = io.connect('http://localhost:5000')
 
 
 function App() {
-  
   const [message, setMessage] = useState('')
   const [room, setRoom] = useState('')
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [chat, setChat] = useState([])
-
+  console.log(chat);
   // collection ref
   const roomsColRef = collection(db, 'rooms')
-  
   // queries
   const roomRef = query(roomsColRef, where("roomID", "==", room))
   console.log(roomRef)
-  // const chatRef = doc(db,'rooms', room,  'chat')
-  // console.log(chatRef)
+
 
 
     const sendChat = (e) => {
       e.preventDefault();
       const userID = socket.id;
+      let currTimeStamp = serverTimestamp();
       if(room != ''){
-        setChat([...chat, {message, userID, room}]);
-        // const roomRef = query(roomsColRef, where("roomID", "==", room))
-        // const chatRef = doc(db,'chat', )
-        // console.log(chatRef)
-        updateDoc(chatRef, {
-          message: message,
-          userID: userID,
-          userName: `${userID}+name`,
-          timeStamp: serverTimestamp()
+        let chatArr  = [...chat, {message, userID, room, timeStamp:currTimeStamp}];
+        chatArr.sort((x, y) => {
+          return x.timeStamp - y.timeStamp;
+        })
+        setChat(chatArr);
+        
+        onSnapshot(roomRef, (snapshot) => {
 
+          const chatColRef = collection(db, 'rooms', snapshot.docs[0].id, 'chat')
+          addDoc(chatColRef, {
+            message: message,
+            userID: userID,
+            userName: `${userID}+name`,
+            timeStamp: currTimeStamp
+  
+          })
         })
       }
 
-      socket.emit("chat", {message, userID, room})
+      socket.emit("chat", {message, userID, room, timeStamp: currTimeStamp})
       setMessage('')
     }
 
@@ -89,23 +93,48 @@ function App() {
       socket.emit("join-room", room)
       localStorage.setItem("roomID", room)
       getOnlineUsers()
-      //////////////////////////////////////CHECK!!!!!!!
-      addDoc(roomsColRef, {
-        roomID: room
+      onSnapshot(roomRef, (ref) => {
+        if(ref.empty){
+          addDoc(roomsColRef, {
+            roomID: room
+          })
+        }
+        else {
+          const chatColRef = collection(db, 'rooms', ref.docs[0].id, 'chat')
+          onSnapshot(chatColRef, (snap) => {
+            // console.log(snap.docs)
+            let chatArr = snap.docs.map(doc => {
+              let messageString = doc.data().message;
+              let userID = doc.data().userID;
+              let timeStamp = doc.data().timeStamp;
+              // console.log(doc.data())
+              return ( {message: messageString, userID, room, timeStamp})
+            })
+            chatArr.sort((x, y) => {
+              return x.timeStamp - y.timeStamp;
+            })
+            setChat(chatArr)
+          })
+        }
       })
+      
     }
 
 
     useEffect(() => {
       socket.on("recieve-message", (payload) => {
-        setChat([...chat, payload])
+        let chatArr = [...chat, payload]
+        chatArr.sort((x, y) => {
+          return x.timeStamp - y.timeStamp;
+        })
+        setChat(chatArr);
       })
     })
 
     useEffect(() => {
+
       let roomName = localStorage.getItem("roomID")
       setRoom(roomName)
-      // getOnlineUsers()
     }, [])
 
   return (

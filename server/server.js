@@ -16,11 +16,11 @@ io.on('connection', (socket)=> {
     socket.on("chat", (payload) => {
         console.log(payload)
         if(payload.room == ''){
-            const resObj = {message: "You dont have access to any room", userID: payload.userID, room: "", online: false};
+            const resObj = {message: "You dont have access to any room", userID: payload.userID, room: "", timeStamp: payload.timeStamp};
             socket.emit("recieve-message", resObj );
         }
         else{
-            const resObj = {message: payload.message, userID: payload.userID, room: payload.userID, online: true}
+            const resObj = {message: payload.message, userID: payload.userID, room: payload.userID, timeStamp: payload.timeStamp}
             socket.broadcast.to(payload.room).emit("recieve-message", resObj);
         }
     })
@@ -39,8 +39,8 @@ io.on('connection', (socket)=> {
         io.to(room).emit("recieve-online-users", onlineUsersArray)
     })
 
-    socket.on('diconnect', () => {
-        console.log('User has screenLeft, socket has been disconnected !!');
+    socket.on('disconnect', () => {
+        socket.emit("disconnect-id", socket.id)
     })
 })
 
