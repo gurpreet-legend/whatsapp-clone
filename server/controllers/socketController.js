@@ -1,5 +1,11 @@
+const io = require('socket.io')(server, {
+    cors: {
+      origin: "*" // To remove Cross-origin error
+    }
+});
+
 const socketControllers = {
-    handleChat: async (payload) => {
+    handleChat: async (payload, socket) => {
         console.log(payload)
         if (payload.room == '') {
             const resObj = { message: "You dont have access to any room", userID: payload.userID, room: "", timeStamp: payload.timeStamp };
@@ -10,7 +16,7 @@ const socketControllers = {
             socket.broadcast.to(payload.room).emit("recieve-message", resObj);
         }
     },
-    getOnlineUsers: async(room)=>{
+    getOnlineUsers: async(room, socket)=>{
         console.log(room)
         const onlineUsersArray = Array.from(io.sockets.adapter.rooms.get(room))
         console.log(onlineUsersArray)

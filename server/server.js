@@ -15,7 +15,7 @@ io.on('connection', (socket)=> {
     console.log('Socket is connected!!');
 
     socket.on("chat", (payload) => {
-        socketControllers.handleChat(payload);
+        socketControllers.handleChat(payload, socket);
     })
 
     socket.on("join-room", room => {
@@ -23,7 +23,7 @@ io.on('connection', (socket)=> {
     })
 
     socket.on("get-online-users", room => {
-        socketControllers.getOnlineUsers(room);
+        socketControllers.getOnlineUsers(room, socket);
     })
 
     socket.on('disconnect', () => {
