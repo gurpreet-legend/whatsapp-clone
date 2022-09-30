@@ -1,9 +1,4 @@
-const io = require('socket.io')(server, {
-    cors: {
-      origin: "*" // To remove Cross-origin error
-    }
-});
-
+const io = require('../config/socket')
 const socketControllers = {
     handleChat: async (payload, socket) => {
         console.log(payload)

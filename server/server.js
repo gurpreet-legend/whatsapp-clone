@@ -1,11 +1,7 @@
 const app = require('express')();
 const server = require('http').createServer(app);
 const socketControllers = require('./controllers/socketController')
-const io = require('socket.io')(server, {
-    cors: {
-      origin: "*" // To remove Cross-origin error
-    }
-});
+const io = require('./config/socket')
 
 const router = require('./routes/router');
 
