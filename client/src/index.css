@@ -33,7 +33,7 @@ input {
   color: white;
   background-color: #128C7E;
   display: flex;
-  height: 10vh;
+  height: 15vh;
 }
 .heading img {
   width: 100px;
@@ -75,15 +75,16 @@ input{
   flex-grow: 2;
   padding: 1rem;
   border-radius: 100px;
-  border: none;
+  border: 2px solid black;
   outline: none;
 }
 
 .btn {
   padding: 1rem;
   border-radius: 50%;
-  margin-left: 10px;
-  border: 10px;
+  /* margin-left: 10px; */
+  margin:0px 10px;
+  border: 2px solid black;
   font-size: 1.5rem;
 }
 
