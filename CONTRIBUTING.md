@@ -12,15 +12,6 @@ Follow the below instructions for contributing in this project:
 5. And in the firebase project, go to Firestore DataBase and create a collection named rooms, just like this :
 <img src="https://i.ibb.co/xsh3PW4/Screenshot-2021-12-13-223432.png" alt="Screenshot-2021-12-13-223432" border="0">
 
-#### The project has been successfully installed in the device.
-5. Start the application by running the following command
-> ``` nodemon index.js ```
-1. Now go to the address below to your default browser
-> ```localhost:5000```
-
-*Steps 1-4 are needed for first-time installation only. Only steps 5 and 6 will be needed while devolping the project.*
-
-
 ## Creating an issue
 
 Follow the instructions below while creating the issue.
