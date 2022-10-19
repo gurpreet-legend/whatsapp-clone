@@ -1,7 +1,12 @@
 const app = require('express')();
 const server = require('http').createServer(app);
 const socketControllers = require('./controllers/socketController')
-const io = require('./config/socket')
+
+const io = require('socket.io')(server, {
+    cors: {
+      origin: "*" // To remove Cross-origin error
+    }
+});
 
 const router = require('./routes/router');
 
@@ -11,7 +16,7 @@ io.on('connection', (socket)=> {
     console.log('Socket is connected!!');
 
     socket.on("chat", (payload) => {
-        socketControllers.handleChat(payload, socket);
+        socketControllers.handleChat(payload, socket, io);
     })
 
     socket.on("join-room", room => {
@@ -19,7 +24,7 @@ io.on('connection', (socket)=> {
     })
 
     socket.on("get-online-users", room => {
-        socketControllers.getOnlineUsers(room, socket);
+        socketControllers.getOnlineUsers(room, socket, io);
     })
 
     socket.on('disconnect', () => {
