@@ -124,3 +124,18 @@ input{
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.356);
 }
+.chat-notification-logo-wrapper {
+  flex-shrink: 0;
+}
+
+.chat-notification-logo {
+  height: 5rem;
+  width: 5rem;
+}
+
+.dropdown {
+  position: absolute;
+  inset: 0px auto auto 0px;
+  margin: 0px;
+  transform: translate3d(0px, 80.64px, 0px);
+}
